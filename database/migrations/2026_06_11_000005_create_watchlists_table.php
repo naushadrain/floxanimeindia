@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('watchlists', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('anime_id')->constrained()->cascadeOnDelete();
+            $table->enum('status', ['watching', 'completed', 'plan_to_watch', 'on_hold', 'dropped'])
+                  ->default('plan_to_watch');
+            $table->unsignedSmallInteger('progress')->default(0)->comment('last episode watched');
+            $table->timestamps();
+
+            $table->unique(['user_id', 'anime_id']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('watchlists');
+    }
+};
