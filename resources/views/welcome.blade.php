@@ -13,28 +13,24 @@
         body { background:#070713; }
         .scrollbar-hide::-webkit-scrollbar { display:none; }
         .scrollbar-hide { -ms-overflow-style:none; scrollbar-width:none; }
-        #videoModal { backdrop-filter: blur(14px); }
 
         .video-frame {
             position: relative;
             width: 100%;
             padding-bottom: 56.25%;
-            background: #000;
+            background:#000;
         }
 
         .video-frame iframe {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
+            position:absolute;
+            inset:0;
+            width:100%;
+            height:100%;
         }
 
-        @media(max-width:639px){
-            #videoModal .player-box {
-                border-radius: 24px 24px 0 0;
-                max-height: 94vh;
-                overflow-y: auto;
-            }
+        .fullscreen-video iframe {
+            width:100%;
+            height:100%;
         }
     </style>
 </head>
@@ -85,20 +81,6 @@
             'image' => 'https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=1200&auto=format&fit=crop',
             'description' => 'A futuristic samurai fights through neon cities, cyber enemies, and broken memories in search of truth.',
         ],
-        [
-            'title' => 'BloodMoon Rising',
-            'year' => '2025',
-            'category' => 'Horror',
-            'rating' => '8.5',
-            'votes' => '28K',
-            'episodes' => '13',
-            'duration' => '22 min',
-            'studio' => 'Wit Studio',
-            'director' => 'Tetsuro Araki',
-            'video_url' => 'https://www.youtube.com/embed/TKF4ovKg3-c',
-            'image' => 'https://images.unsplash.com/photo-1535930891776-0c2dfb7fda1a?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Ancient vampires awaken and a lone hunter must stop the world from falling into eternal night.',
-        ],
     ];
 
     $latest = [
@@ -144,23 +126,9 @@
             'image' => 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=900&auto=format&fit=crop',
             'description' => 'Piloting a forbidden mech, a young soldier wages war against an empire.',
         ],
-        [
-            'title' => 'Ocean Spirit',
-            'year' => '2026',
-            'category' => 'Adventure',
-            'rating' => '8.6',
-            'votes' => '19K',
-            'episodes' => '14',
-            'duration' => '22 min',
-            'studio' => 'Studio Ghibli',
-            'director' => 'Hayao Miyazaki',
-            'video_url' => 'https://www.youtube.com/embed/aqz-KE-bpKQ',
-            'image' => 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=900&auto=format&fit=crop',
-            'description' => 'A young girl bonded with an ancient sea spirit travels to the edge of the world.',
-        ],
     ];
 
-    $newUploads = [
+    $uploads = [
         [
             'title' => 'Void Walker',
             'year' => '2026',
@@ -174,20 +142,6 @@
             'video_url' => 'https://www.youtube.com/embed/eRsGyueVLvQ',
             'image' => 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=900&auto=format&fit=crop',
             'description' => 'A detective enters the space between dimensions to hunt a killer who leaves no trace.',
-        ],
-        [
-            'title' => 'Neon Butterfly',
-            'year' => '2026',
-            'category' => 'Romance',
-            'rating' => '8.4',
-            'votes' => '8K',
-            'episodes' => '12',
-            'duration' => '23 min',
-            'studio' => 'Kyoto Animation',
-            'director' => 'Naoko Yamada',
-            'video_url' => 'https://www.youtube.com/embed/R6MlUcmOul8',
-            'image' => 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=900&auto=format&fit=crop',
-            'description' => 'Two rivals at an animation school find unexpected love through their shared passion.',
         ],
         [
             'title' => 'Dragon Reborn',
@@ -219,7 +173,7 @@
         ],
     ];
 
-    $allAnime = array_values(array_merge($trending, $latest, $newUploads));
+    $allAnime = array_values(array_merge($trending, $latest, $uploads));
 @endphp
 
 <header class="sticky top-0 z-50 border-b border-white/10 bg-[#080812]/90 backdrop-blur-xl">
@@ -233,24 +187,20 @@
             <button class="transition hover:text-white">New Uploads</button>
         </nav>
 
-        <div class="ml-auto flex items-center gap-2">
-            <button class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-slate-300 hover:bg-white/15">
-                <i data-lucide="search" class="h-4 w-4"></i>
-            </button>
-
+        <div class="ml-auto">
             <a href="{{ route('login') }}"
-               class="hidden rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-2 text-xs font-bold text-white sm:block">
+               class="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-2 text-xs font-bold text-white">
                 Admin Login
             </a>
         </div>
     </div>
 </header>
 
-<main class="pb-24 lg:pb-10">
+<main class="pb-24">
 
     {{-- HERO --}}
     <section class="relative overflow-hidden">
-        <div class="relative h-[68vh] min-h-[480px] sm:h-[76vh]">
+        <div class="relative h-[62vh] min-h-[430px] sm:h-[76vh]">
             <img src="{{ $allAnime[0]['image'] }}"
                  class="absolute inset-0 h-full w-full object-cover"
                  alt="{{ $allAnime[0]['title'] }}">
@@ -260,40 +210,31 @@
 
             <div class="absolute bottom-0 left-0 right-0 px-4 pb-8 sm:px-8 lg:px-12 lg:pb-16">
                 <div class="max-w-2xl">
-                    <div class="mb-3 flex flex-wrap items-center gap-2">
-                        <span class="rounded-full bg-fuchsia-500 px-3 py-1 text-[10px] font-black text-white">
-                            Trending
-                        </span>
-                        <span class="rounded-full bg-white/10 px-3 py-1 text-[10px] text-white">
-                            {{ $allAnime[0]['year'] }}
-                        </span>
-                        <span class="rounded-full bg-black/50 px-3 py-1 text-[10px] font-bold text-yellow-400">
-                            ★ {{ $allAnime[0]['rating'] }}/10
-                        </span>
-                    </div>
+                    <span class="rounded-full bg-fuchsia-500 px-3 py-1 text-[10px] font-black text-white">
+                        Featured
+                    </span>
 
-                    <h1 class="text-4xl font-black leading-tight sm:text-6xl">
+                    <h1 class="mt-3 text-4xl font-black leading-tight sm:text-6xl">
                         {{ $allAnime[0]['title'] }}
                     </h1>
 
-                    <p class="mt-3 text-sm text-slate-300 sm:text-base">
+                    <p class="mt-3 text-sm text-slate-300">
                         {{ $allAnime[0]['episodes'] }} Episodes • {{ $allAnime[0]['duration'] }} • {{ $allAnime[0]['studio'] }}
                     </p>
 
-                    <p class="mt-4 line-clamp-3 text-sm leading-6 text-slate-300 sm:max-w-xl sm:text-base">
+                    <p class="mt-4 line-clamp-3 text-sm leading-6 text-slate-300 sm:max-w-xl">
                         {{ $allAnime[0]['description'] }}
                     </p>
 
                     <div class="mt-6 flex gap-3">
-                        <button onclick="openVideoPlayer(0)"
+                        <button onclick="openFullVideo(0)"
                                 class="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-6 py-3 text-sm font-black text-white shadow-lg shadow-fuchsia-500/30 active:scale-95">
                             <i data-lucide="play" class="h-4 w-4 fill-white"></i>
-                            Play Now
+                            Play
                         </button>
 
-                        <button onclick="openVideoPlayer(0)"
-                                class="flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur active:scale-95">
-                            <i data-lucide="info" class="h-4 w-4"></i>
+                        <button onclick="openDetailModal(0)"
+                                class="rounded-2xl border border-white/15 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur active:scale-95">
                             Details
                         </button>
                     </div>
@@ -302,44 +243,65 @@
         </div>
     </section>
 
-    {{-- TRENDING --}}
-    @include('components.video-row-inline', [
-        'sectionTitle' => 'Trending Now',
-        'sectionSub' => 'Most watched anime today',
-        'sectionIcon' => 'trending-up',
-        'items' => $trending,
-        'offset' => 0,
-    ])
+    {{-- ROW FUNCTION REPEATED --}}
+    <section class="px-4 py-5 sm:px-6 lg:px-8">
+        <div class="mb-3 flex items-center justify-between">
+            <div>
+                <h2 class="flex items-center gap-2 text-lg font-black">
+                    <i data-lucide="trending-up" class="h-5 w-5 text-fuchsia-400"></i>
+                    Trending Now
+                </h2>
+                <p class="text-xs text-slate-500">Most watched anime today</p>
+            </div>
+        </div>
 
-    {{-- LATEST --}}
-    @include('components.video-row-inline', [
-        'sectionTitle' => 'Latest Episodes',
-        'sectionSub' => 'Fresh serial episodes added recently',
-        'sectionIcon' => 'clock',
-        'items' => $latest,
-        'offset' => count($trending),
-    ])
+        <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            @foreach($trending as $index => $item)
+                @php $realIndex = $index; @endphp
+                @include('components.video-card-fixed', ['item' => $item, 'realIndex' => $realIndex])
+            @endforeach
+        </div>
+    </section>
 
-    {{-- NEW UPLOADS --}}
-    @include('components.video-row-inline', [
-        'sectionTitle' => 'New Uploads',
-        'sectionSub' => 'Newly uploaded anime videos',
-        'sectionIcon' => 'upload-cloud',
-        'items' => $newUploads,
-        'offset' => count($trending) + count($latest),
-    ])
+    <section class="px-4 py-5 sm:px-6 lg:px-8">
+        <div class="mb-3 flex items-center justify-between">
+            <div>
+                <h2 class="flex items-center gap-2 text-lg font-black">
+                    <i data-lucide="clock" class="h-5 w-5 text-yellow-400"></i>
+                    Latest Episodes
+                </h2>
+                <p class="text-xs text-slate-500">Fresh serial episodes added recently</p>
+            </div>
+        </div>
+
+        <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            @foreach($latest as $index => $item)
+                @php $realIndex = $index + count($trending); @endphp
+                @include('components.video-card-fixed', ['item' => $item, 'realIndex' => $realIndex])
+            @endforeach
+        </div>
+    </section>
+
+    <section class="px-4 py-5 sm:px-6 lg:px-8">
+        <div class="mb-3 flex items-center justify-between">
+            <div>
+                <h2 class="flex items-center gap-2 text-lg font-black">
+                    <i data-lucide="upload-cloud" class="h-5 w-5 text-cyan-400"></i>
+                    New Uploads
+                </h2>
+                <p class="text-xs text-slate-500">Newly uploaded anime videos</p>
+            </div>
+        </div>
+
+        <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            @foreach($uploads as $index => $item)
+                @php $realIndex = $index + count($trending) + count($latest); @endphp
+                @include('components.video-card-fixed', ['item' => $item, 'realIndex' => $realIndex])
+            @endforeach
+        </div>
+    </section>
 
 </main>
-
-{{-- INLINE COMPONENT TEMPLATE --}}
-@once
-    @push('dummy')
-    @endpush
-@endonce
-
-{{-- Because this is one-file code, paste this row manually instead of include if component not exists --}}
-
-<section class="hidden"></section>
 
 {{-- MOBILE BOTTOM NAV --}}
 <nav class="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#080812]/95 backdrop-blur-xl lg:hidden">
@@ -348,17 +310,14 @@
             <i data-lucide="home" class="h-5 w-5"></i>
             <span class="text-[10px] font-semibold">Home</span>
         </button>
-
         <button class="flex flex-col items-center gap-0.5 px-4 py-1 text-slate-500">
             <i data-lucide="search" class="h-5 w-5"></i>
             <span class="text-[10px]">Search</span>
         </button>
-
         <button class="flex flex-col items-center gap-0.5 px-4 py-1 text-slate-500">
             <i data-lucide="compass" class="h-5 w-5"></i>
             <span class="text-[10px]">Genres</span>
         </button>
-
         <a href="{{ route('login') }}" class="flex flex-col items-center gap-0.5 px-4 py-1 text-slate-500">
             <i data-lucide="user" class="h-5 w-5"></i>
             <span class="text-[10px]">Admin</span>
@@ -366,135 +325,66 @@
     </div>
 </nav>
 
-{{-- VIDEO PLAYER MODAL --}}
-<div id="videoModal"
-     class="fixed inset-0 z-[140] hidden items-end justify-center bg-black/80 sm:items-center"
-     onclick="handleVideoBackdrop(event)">
+{{-- CENTER DETAILS MODAL --}}
+<div id="detailModal"
+     class="fixed inset-0 z-[130] hidden items-center justify-center bg-black/75 px-4 backdrop-blur-md"
+     onclick="detailBackdrop(event)">
 
-    <div class="player-box w-full border border-white/10 bg-[#0a0a1a] shadow-2xl sm:mx-4 sm:max-w-5xl sm:rounded-3xl">
+    <div class="w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#111122] shadow-2xl sm:max-w-2xl">
+        <div class="relative aspect-video bg-black">
+            <img id="detailImage" src="" class="h-full w-full object-cover" alt="">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
 
-        <div class="flex items-start justify-between gap-4 px-4 py-4 sm:px-6">
-            <div class="min-w-0">
-                <h3 id="videoTitle" class="truncate text-lg font-black text-white"></h3>
-
-                <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-400">
-                    <span id="videoCategory" class="rounded-full bg-fuchsia-500/20 px-2.5 py-1 font-bold text-fuchsia-300"></span>
-                    <span id="videoYear"></span>
-                    <span id="videoEpisodes"></span>
-                    <span id="videoDuration"></span>
-                </div>
-            </div>
-
-            <button onclick="closeVideoPlayer()"
-                    class="rounded-2xl bg-white/10 p-2.5 text-white hover:bg-white/20">
+            <button onclick="closeDetailModal()"
+                    class="absolute right-3 top-3 rounded-2xl bg-black/60 p-2 text-white backdrop-blur">
                 <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+
+            <button id="detailPlayBtn"
+                    class="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-xl shadow-fuchsia-500/40">
+                <i data-lucide="play" class="h-7 w-7 fill-white"></i>
             </button>
         </div>
 
-        <div class="mx-4 overflow-hidden rounded-2xl bg-black sm:mx-6">
-            <div class="video-frame">
-                <iframe id="videoFrame"
-                        src=""
-                        title="Video Player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                </iframe>
+        <div class="p-5">
+            <div class="mb-2 flex flex-wrap items-center gap-2">
+                <span id="detailCategory" class="rounded-full bg-fuchsia-500/20 px-3 py-1 text-[10px] font-bold text-fuchsia-300"></span>
+                <span id="detailYear" class="text-xs text-slate-400"></span>
+                <span id="detailRating" class="text-xs font-bold text-yellow-400"></span>
             </div>
-        </div>
 
-        <div class="px-4 py-5 sm:px-6">
-            <p id="videoDescription" class="text-sm leading-6 text-slate-400"></p>
+            <h2 id="detailTitle" class="text-2xl font-black text-white"></h2>
 
-            <div class="mt-4 grid grid-cols-3 gap-2 text-center">
-                <div class="rounded-2xl bg-white/6 p-3">
-                    <p class="text-[10px] text-slate-500">Studio</p>
-                    <p id="videoStudio" class="truncate text-xs font-bold text-white"></p>
-                </div>
+            <p id="detailMeta" class="mt-2 text-sm text-slate-400"></p>
 
-                <div class="rounded-2xl bg-white/6 p-3">
-                    <p class="text-[10px] text-slate-500">Director</p>
-                    <p id="videoDirector" class="truncate text-xs font-bold text-white"></p>
-                </div>
+            <p id="detailDescription" class="mt-4 text-sm leading-6 text-slate-300"></p>
 
-                <div class="rounded-2xl bg-white/6 p-3">
-                    <p class="text-[10px] text-slate-500">Votes</p>
-                    <p id="videoVotes" class="text-xs font-bold text-white"></p>
-                </div>
-            </div>
+            <button id="detailPlayBtnBottom"
+                    class="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 py-3 text-sm font-black text-white">
+                <i data-lucide="play" class="h-4 w-4 fill-white"></i>
+                Play Full Screen
+            </button>
         </div>
     </div>
 </div>
 
-{{-- ROWS --}}
-<section class="px-4 py-5 sm:px-6 lg:px-8">
-    <div class="mb-3 flex items-end justify-between">
-        <div>
-            <h2 class="flex items-center gap-2 text-lg font-black text-white">
-                <i data-lucide="trending-up" class="h-5 w-5 text-fuchsia-400"></i>
-                Trending Now
-            </h2>
-            <p class="mt-1 text-xs text-slate-500">Most watched anime today</p>
-        </div>
-        <button onclick="scrollRow('rowTrending', 320)" class="hidden rounded-xl bg-white/10 p-2 text-white lg:block">
-            <i data-lucide="chevron-right" class="h-5 w-5"></i>
-        </button>
-    </div>
+{{-- FULLSCREEN VIDEO MODAL --}}
+<div id="fullVideoModal" class="fixed inset-0 z-[150] hidden bg-black">
+    <button onclick="closeFullVideo()"
+            class="absolute right-4 top-4 z-10 rounded-2xl bg-white/10 p-3 text-white backdrop-blur hover:bg-white/20">
+        <i data-lucide="x" class="h-6 w-6"></i>
+    </button>
 
-    <div id="rowTrending" class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-        @foreach($trending as $index => $item)
-            @include('components.video-card-inline', ['item' => $item, 'realIndex' => $index])
-        @endforeach
+    <div class="fullscreen-video h-screen w-screen">
+        <iframe id="fullVideoFrame"
+                src=""
+                title="Video Player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+        </iframe>
     </div>
-</section>
-
-<section class="px-4 py-5 sm:px-6 lg:px-8">
-    <div class="mb-3 flex items-end justify-between">
-        <div>
-            <h2 class="flex items-center gap-2 text-lg font-black text-white">
-                <i data-lucide="clock" class="h-5 w-5 text-yellow-400"></i>
-                Latest Episodes
-            </h2>
-            <p class="mt-1 text-xs text-slate-500">Fresh serial episodes added recently</p>
-        </div>
-        <button onclick="scrollRow('rowLatest', 320)" class="hidden rounded-xl bg-white/10 p-2 text-white lg:block">
-            <i data-lucide="chevron-right" class="h-5 w-5"></i>
-        </button>
-    </div>
-
-    <div id="rowLatest" class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-        @foreach($latest as $index => $item)
-            @include('components.video-card-inline', ['item' => $item, 'realIndex' => $index + count($trending)])
-        @endforeach
-    </div>
-</section>
-
-<section class="px-4 py-5 sm:px-6 lg:px-8">
-    <div class="mb-3 flex items-end justify-between">
-        <div>
-            <h2 class="flex items-center gap-2 text-lg font-black text-white">
-                <i data-lucide="upload-cloud" class="h-5 w-5 text-cyan-400"></i>
-                New Uploads
-            </h2>
-            <p class="mt-1 text-xs text-slate-500">Newly uploaded anime videos</p>
-        </div>
-        <button onclick="scrollRow('rowUploads', 320)" class="hidden rounded-xl bg-white/10 p-2 text-white lg:block">
-            <i data-lucide="chevron-right" class="h-5 w-5"></i>
-        </button>
-    </div>
-
-    <div id="rowUploads" class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-        @foreach($newUploads as $index => $item)
-            @include('components.video-card-inline', ['item' => $item, 'realIndex' => $index + count($trending) + count($latest)])
-        @endforeach
-    </div>
-</section>
-
-{{-- CARD COMPONENT FALLBACK --}}
-@php
-    // If you do not want separate components, replace @include('components.video-card-inline')
-    // with this card block manually.
-@endphp
+</div>
 
 <script>
     const animeData = @json($allAnime);
@@ -503,29 +393,30 @@
         lucide.createIcons();
     }
 
-    function scrollRow(id, amount) {
-        const el = document.getElementById(id);
-        if (el) el.scrollBy({ left: amount, behavior: 'smooth' });
-    }
-
-    function openVideoPlayer(index) {
+    function openDetailModal(index) {
         const item = animeData[index];
         if (!item) return;
 
-        document.getElementById('videoTitle').innerText = item.title;
-        document.getElementById('videoCategory').innerText = item.category;
-        document.getElementById('videoYear').innerText = item.year;
-        document.getElementById('videoEpisodes').innerText = item.episodes + ' eps';
-        document.getElementById('videoDuration').innerText = '• ' + item.duration;
-        document.getElementById('videoDescription').innerText = item.description;
-        document.getElementById('videoStudio').innerText = item.studio;
-        document.getElementById('videoDirector').innerText = item.director;
-        document.getElementById('videoVotes').innerText = item.votes;
+        document.getElementById('detailImage').src = item.image;
+        document.getElementById('detailCategory').innerText = item.category;
+        document.getElementById('detailYear').innerText = item.year;
+        document.getElementById('detailRating').innerText = '★ ' + item.rating;
+        document.getElementById('detailTitle').innerText = item.title;
+        document.getElementById('detailMeta').innerText =
+            item.episodes + ' Episodes • ' + item.duration + ' • ' + item.studio;
+        document.getElementById('detailDescription').innerText = item.description;
 
-        document.getElementById('videoFrame').src =
-            item.video_url + '?autoplay=1&rel=0&modestbranding=1';
+        document.getElementById('detailPlayBtn').onclick = function () {
+            closeDetailModal();
+            openFullVideo(index);
+        };
 
-        const modal = document.getElementById('videoModal');
+        document.getElementById('detailPlayBtnBottom').onclick = function () {
+            closeDetailModal();
+            openFullVideo(index);
+        };
+
+        const modal = document.getElementById('detailModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
 
@@ -533,24 +424,47 @@
         refreshIcons();
     }
 
-    function closeVideoPlayer() {
-        document.getElementById('videoFrame').src = '';
-
-        const modal = document.getElementById('videoModal');
+    function closeDetailModal() {
+        const modal = document.getElementById('detailModal');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    function detailBackdrop(e) {
+        if (e.target === document.getElementById('detailModal')) {
+            closeDetailModal();
+        }
+    }
+
+    function openFullVideo(index) {
+        const item = animeData[index];
+        if (!item) return;
+
+        document.getElementById('fullVideoFrame').src =
+            item.video_url + '?autoplay=1&rel=0&modestbranding=1';
+
+        const modal = document.getElementById('fullVideoModal');
+        modal.classList.remove('hidden');
+
+        document.body.style.overflow = 'hidden';
+        refreshIcons();
+    }
+
+    function closeFullVideo() {
+        document.getElementById('fullVideoFrame').src = '';
+
+        const modal = document.getElementById('fullVideoModal');
+        modal.classList.add('hidden');
 
         document.body.style.overflow = '';
     }
 
-    function handleVideoBackdrop(e) {
-        if (e.target === document.getElementById('videoModal')) {
-            closeVideoPlayer();
-        }
-    }
-
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeVideoPlayer();
+        if (e.key === 'Escape') {
+            closeFullVideo();
+            closeDetailModal();
+        }
     });
 
     refreshIcons();
