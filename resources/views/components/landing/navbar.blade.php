@@ -1,134 +1,178 @@
-<header class="sticky top-0 z-50 border-b border-white/10 bg-[#080812]/85 backdrop-blur-xl">
-    <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-3">
-            <div class="flex h-11 w-25">
-                <img src={{asset('logo/logo.png')}} alt="Logo" class="h-11 w-25 rounded-1xl object-cover">
-            </div>
+{{-- ── Top Navigation Bar ────────────────────────────────────────────── --}}
+<header class="sticky top-0 z-50 border-b border-white/8 bg-[#080812]/90 backdrop-blur-xl">
+    <div class="flex items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
 
-            {{-- <div>
-                <h1 class="text-xl font-black leading-none text-white">
-                    floxanimeindia
-                </h1>
-                <p class="mt-1 hidden text-xs text-slate-400 sm:block">
-                    Watch animated videos online
-                </p>
-            </div> --}}
+        {{-- Logo --}}
+        <div class="flex shrink-0 items-center gap-2">
+            <div class="flex h-9 w-auto">
+                <img src="{{ asset('logo/logo.png') }}" alt="floxanimeindia"
+                     class="h-9 w-auto object-contain">
+            </div>
         </div>
 
-        <nav class="hidden items-center gap-6 text-sm text-slate-300 lg:flex">
-            <button class="transition hover:text-white">Browse</button>
-            <button class="transition hover:text-white">Trending</button>
-            <button class="transition hover:text-white">New Releases</button>
-            <button onclick="openGenreOffcanvas()" class="transition hover:text-white">Genres</button>
+        {{-- Desktop nav links --}}
+        <nav class="hidden items-center gap-5 text-sm text-slate-300 lg:flex">
+            <button class="font-medium transition hover:text-white">Browse</button>
+            <button class="font-medium transition hover:text-white">Trending</button>
+            <button class="font-medium transition hover:text-white">New Releases</button>
+            <button onclick="openGenreOffcanvas()" class="font-medium transition hover:text-white">Genres</button>
         </nav>
 
-        <div class="mx-auto hidden w-full max-w-md items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 md:flex">
-            <i data-lucide="search" class="h-5 w-5 text-slate-400"></i>
-            <input
-                placeholder="Search anime..."
-                class="h-9 w-full border-0 bg-transparent text-white shadow-none outline-none placeholder:text-slate-500"
-            />
+        {{-- Search bar (desktop) --}}
+        <div class="mx-auto hidden max-w-xs items-center gap-2 rounded-xl border border-white/10 bg-white/6 px-3 py-2 lg:flex xl:max-w-sm">
+            <i data-lucide="search" class="h-4 w-4 shrink-0 text-slate-400"></i>
+            <input placeholder="Search anime…"
+                   class="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500">
         </div>
 
-        <div class="ml-auto flex items-center gap-2">
-            <button
-                onclick="openConfirmModal()"
-                class="hidden h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-white/15 sm:inline-flex"
-            >
-                <i data-lucide="heart" class="h-5 w-5"></i>
+        {{-- Right side icons --}}
+        <div class="ml-auto flex items-center gap-1.5">
+
+            {{-- Search icon (mobile/tablet — shows the mobile search bar below) --}}
+            <button onclick="toggleMobileSearch()"
+                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/8 text-slate-300 hover:bg-white/14 hover:text-white transition lg:hidden">
+                <i data-lucide="search" class="h-4.5 w-4.5" style="height:18px;width:18px"></i>
             </button>
 
-            <button class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-white/15">
-                <i data-lucide="bell" class="h-5 w-5"></i>
+            {{-- Notification --}}
+            <button class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/8 text-slate-300 hover:bg-white/14 hover:text-white transition">
+                <i data-lucide="bell" class="h-4.5 w-4.5" style="height:18px;width:18px"></i>
             </button>
 
+            {{-- Profile (desktop) --}}
             <div class="relative hidden sm:block">
-                <button
-                    data-profile-button="true"
-                    onclick="toggleProfileDropdown()"
-                    class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-white/15"
-                >
-                    <i data-lucide="user-circle" class="h-6 w-6"></i>
+                <button data-profile-button="true"
+                        onclick="toggleProfileDropdown()"
+                        class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/8 text-slate-300 hover:bg-white/14 hover:text-white transition">
+                    <i data-lucide="user-circle" class="h-5 w-5"></i>
                 </button>
 
-                <div
-                    id="profileDropdown"
-                    class="absolute right-0 mt-3 hidden w-48 overflow-hidden rounded-xl border border-white/10 bg-[#111122] shadow-xl"
-                >
-                    <button onclick="openProfileModal()" class="block w-full px-4 py-3 text-left text-sm text-slate-200 hover:bg-white/10">
+                <div id="profileDropdown"
+                     class="absolute right-0 mt-2 hidden w-48 overflow-hidden rounded-2xl border border-white/10 bg-[#111122] shadow-xl">
+                    <button onclick="openProfileModal()"
+                            class="block w-full px-4 py-3 text-left text-sm text-slate-200 hover:bg-white/8 transition">
                         Profile
                     </button>
-
-                    <button class="block w-full px-4 py-3 text-left text-sm text-slate-200 hover:bg-white/10">
+                    <button class="block w-full px-4 py-3 text-left text-sm text-slate-200 hover:bg-white/8 transition">
                         Settings
                     </button>
-
-                    <div class="border-t border-white/10"></div>
-
-                    <button onclick="openLoginModal()" class="block w-full px-4 py-3 text-left text-sm font-semibold text-fuchsia-400 hover:bg-fuchsia-500/10">
-                        LogIn
-                    </button>
+                    <div class="border-t border-white/8"></div>
+                    <a href="{{ route('login') }}"
+                       class="block w-full px-4 py-3 text-left text-sm font-semibold text-fuchsia-400 hover:bg-fuchsia-500/10 transition">
+                        Admin Login
+                    </a>
                 </div>
             </div>
-
-            <button
-                onclick="openMobileMenu()"
-                class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-white/15 lg:hidden"
-            >
-                <i data-lucide="menu" class="h-5 w-5"></i>
-            </button>
         </div>
     </div>
 
-    <div class="px-4 pb-4 md:hidden">
-        <div class="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2">
-            <i data-lucide="search" class="h-5 w-5 text-slate-400"></i>
-            <input
-                placeholder="Search anime..."
-                class="h-9 w-full border-0 bg-transparent text-white shadow-none outline-none placeholder:text-slate-500"
-            />
+    {{-- Mobile search bar (expandable) --}}
+    <div id="mobileSearchBar" class="hidden px-4 pb-3 sm:px-6 lg:hidden">
+        <div class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/6 px-3 py-2">
+            <i data-lucide="search" class="h-4 w-4 shrink-0 text-slate-400"></i>
+            <input placeholder="Search anime…"
+                   class="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
+                   autofocus id="mobileSearchInput">
+            <button onclick="toggleMobileSearch()" class="text-slate-500 hover:text-white">
+                <i data-lucide="x" class="h-4 w-4"></i>
+            </button>
         </div>
     </div>
 </header>
 
-<div id="mobileMenu" class="fixed inset-0 z-[100] hidden">
-    <div onclick="closeMobileMenu()" class="absolute inset-0 bg-black/60"></div>
+{{-- ── Mobile Bottom Tab Bar ─────────────────────────────────────────── --}}
+<nav class="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#080812]/95 backdrop-blur-xl lg:hidden">
+    <div class="flex items-center justify-around px-2 pb-safe pt-2"
+         style="padding-bottom: max(8px, env(safe-area-inset-bottom));">
 
-    <div class="absolute right-0 top-0 h-full w-80 border-l border-white/10 bg-[#090918] p-6 text-white shadow-2xl">
+        {{-- Home --}}
+        <button class="bottom-tab active-tab flex flex-col items-center gap-0.5 px-4 py-1 text-fuchsia-400">
+            <i data-lucide="home" class="h-5 w-5"></i>
+            <span class="text-[10px] font-semibold">Home</span>
+        </button>
+
+        {{-- Search --}}
+        <button onclick="toggleMobileSearch()"
+                class="bottom-tab flex flex-col items-center gap-0.5 px-4 py-1 text-slate-500 hover:text-white transition">
+            <i data-lucide="search" class="h-5 w-5"></i>
+            <span class="text-[10px]">Search</span>
+        </button>
+
+        {{-- Genres --}}
+        <button onclick="openGenreOffcanvas()"
+                class="bottom-tab flex flex-col items-center gap-0.5 px-4 py-1 text-slate-500 hover:text-white transition">
+            <i data-lucide="compass" class="h-5 w-5"></i>
+            <span class="text-[10px]">Genres</span>
+        </button>
+
+        {{-- Profile --}}
+        <button onclick="openLoginModal()"
+                class="bottom-tab flex flex-col items-center gap-0.5 px-4 py-1 text-slate-500 hover:text-white transition">
+            <i data-lucide="user" class="h-5 w-5"></i>
+            <span class="text-[10px]">Profile</span>
+        </button>
+
+    </div>
+</nav>
+
+{{-- ── Mobile full-screen menu (hamburger sheet) ────────────────────── --}}
+<div id="mobileMenu" class="fixed inset-0 z-100 hidden">
+    <div onclick="closeMobileMenu()" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <div class="absolute right-0 top-0 h-full w-72 border-l border-white/10 bg-[#090918] p-6 text-white shadow-2xl">
         <div class="flex items-center justify-between">
-            <h2 class="text-lg font-bold">Menu</h2>
-            <button onclick="closeMobileMenu()" class="rounded-xl bg-white/10 p-2 hover:bg-white/15">
+            <h2 class="text-base font-black">Menu</h2>
+            <button onclick="closeMobileMenu()" class="rounded-xl bg-white/8 p-2 hover:bg-white/14">
                 <i data-lucide="x" class="h-5 w-5"></i>
             </button>
         </div>
-
-        <div class="mt-8 space-y-3">
-            <button class="w-full rounded-xl px-4 py-3 text-left text-white hover:bg-white/10">Browse</button>
-            <button class="w-full rounded-xl px-4 py-3 text-left text-white hover:bg-white/10">Trending</button>
-            <button class="w-full rounded-xl px-4 py-3 text-left text-white hover:bg-white/10">New Releases</button>
-            <button onclick="openGenreOffcanvas()" class="w-full rounded-xl px-4 py-3 text-left text-white hover:bg-white/10">Genres</button>
-            <button onclick="openProfileModal()" class="w-full rounded-xl px-4 py-3 text-left text-white hover:bg-white/10">Profile</button>
-            <button onclick="openLoginModal()" class="w-full rounded-2xl bg-fuchsia-500 px-4 py-3 text-left font-bold text-white hover:bg-fuchsia-600">LogIn</button>
+        <div class="mt-6 space-y-1">
+            <button class="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-white hover:bg-white/8 transition">Browse</button>
+            <button class="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-white hover:bg-white/8 transition">Trending</button>
+            <button class="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-white hover:bg-white/8 transition">New Releases</button>
+            <button onclick="openGenreOffcanvas()" class="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-white hover:bg-white/8 transition">Genres</button>
+            <button onclick="openProfileModal()" class="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-white hover:bg-white/8 transition">Profile</button>
+        </div>
+        <div class="mt-4 border-t border-white/8 pt-4">
+            <a href="{{ route('login') }}"
+               class="flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-violet-500 to-fuchsia-500 px-4 py-3 text-sm font-bold text-white hover:opacity-90 transition">
+                <i data-lucide="log-in" class="h-4 w-4"></i>
+                Admin Login
+            </a>
         </div>
     </div>
 </div>
 
-<div id="loginModal" class="fixed inset-0 z-[120] hidden items-center justify-center bg-black/70 px-4">
-    <div class="w-full max-w-md rounded-3xl border border-white/10 bg-[#111122] p-6 shadow-2xl">
-        <div class="flex items-center justify-between">
-            <h2 class="text-xl font-black text-white">LogIn</h2>
-            <button onclick="closeLoginModal()" class="rounded-xl bg-white/10 p-2 hover:bg-white/15">
-                <i data-lucide="x" class="h-5 w-5"></i>
+{{-- ── Login Modal ───────────────────────────────────────────────────── --}}
+<div id="loginModal" class="fixed inset-0 z-120 hidden items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
+    <div class="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111122] p-6 shadow-2xl">
+        <div class="mb-5 flex items-center justify-between">
+            <h2 class="text-lg font-black text-white">Sign In</h2>
+            <button onclick="closeLoginModal()" class="rounded-xl bg-white/8 p-2 hover:bg-white/14 transition">
+                <i data-lucide="x" class="h-4 w-4"></i>
             </button>
         </div>
-
-        <div class="mt-6 space-y-4">
-            <input type="email" placeholder="Email address" class="w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-white outline-none placeholder:text-slate-500">
-            <input type="password" placeholder="Password" class="w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-white outline-none placeholder:text-slate-500">
-
-            <button class="w-full rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-3 font-bold text-white hover:opacity-90">
-                LogIn
+        <div class="space-y-3">
+            <input type="email" placeholder="Email address"
+                   class="w-full rounded-2xl border border-white/10 bg-white/6 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-violet-500/50 transition">
+            <input type="password" placeholder="Password"
+                   class="w-full rounded-2xl border border-white/10 bg-white/6 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-violet-500/50 transition">
+            <button class="w-full rounded-2xl bg-linear-to-r from-violet-500 to-fuchsia-500 py-3 text-sm font-bold text-white hover:opacity-90 transition">
+                Sign In
             </button>
+            <p class="text-center text-xs text-slate-500">
+                Admin?
+                <a href="{{ route('login') }}" class="text-fuchsia-400 hover:underline">Go to admin panel →</a>
+            </p>
         </div>
     </div>
 </div>
+
+<script>
+    function toggleMobileSearch() {
+        const bar   = document.getElementById('mobileSearchBar');
+        const input = document.getElementById('mobileSearchInput');
+        const isHidden = bar.classList.contains('hidden');
+        bar.classList.toggle('hidden', !isHidden);
+        if (isHidden && input) setTimeout(() => input.focus(), 50);
+    }
+</script>

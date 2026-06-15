@@ -326,9 +326,12 @@
 @endphp
 
 {{-- ═══════════════════════════════════════════════════════════════════ --}}
-{{-- NAVBAR  +  Mobile Menu  +  Login Modal                             --}}
+{{-- NAVBAR  +  Mobile Bottom Tab Bar  +  Login Modal                   --}}
 {{-- ═══════════════════════════════════════════════════════════════════ --}}
 @include('components.landing.navbar')
+
+{{-- ── Main scrollable content (pb-20 reserves space for bottom tab) ── --}}
+<main class="pb-20 lg:pb-0">
 
 {{-- ═══════════════════════════════════════════════════════════════════ --}}
 {{-- HERO SECTION                                                        --}}
@@ -336,7 +339,7 @@
 @include('components.landing.hero-section', ['animeList' => $anime])
 
 {{-- ═══════════════════════════════════════════════════════════════════ --}}
-{{-- TRENDING  —  3-column grid, index offset 3 (after $anime)          --}}
+{{-- TRENDING  —  horizontal scroll, index offset 3                     --}}
 {{-- ═══════════════════════════════════════════════════════════════════ --}}
 @include('components.landing.anime-row', [
     'title'       => 'Trending Now',
@@ -356,6 +359,8 @@
     'items'       => $newReleases,
     'indexOffset' => 9,
 ])
+
+</main>{{-- end main --}}
 
 {{-- ═══════════════════════════════════════════════════════════════════ --}}
 {{-- GENRE OFFCANVAS                                                     --}}
@@ -458,7 +463,7 @@
     /* ─── Lucide ───────────────────────────────────────────────────── */
     function refreshIcons() { lucide.createIcons(); }
 
-    /* ─── Hero Slider ──────────────────────────────────────────────── */
+    /* ─── Hero Slider (manual only — no auto-slide) ───────────────── */
     let activeIndex = 0;
 
     function setSlide(index) {
@@ -470,11 +475,9 @@
         document.querySelectorAll('.hero-content').forEach(el => {
             el.classList.add('hidden'); el.classList.remove('block');
         });
-        document.querySelectorAll('.hero-poster').forEach(el => {
-            el.classList.add('hidden'); el.classList.remove('block');
-        });
+        /* inactive dot style */
         document.querySelectorAll('.hero-dot').forEach(el => {
-            el.className = 'hero-dot h-2 w-2 rounded-full bg-white/40 transition-all hover:bg-white/70';
+            el.className = 'hero-dot h-1.5 w-1.5 rounded-full bg-white/30 transition-all hover:bg-white/60';
         });
 
         const s = document.querySelector(`.hero-slide[data-index="${index}"]`);
@@ -483,11 +486,9 @@
         const c = document.querySelector(`.hero-content[data-index="${index}"]`);
         if (c) { c.classList.remove('hidden'); c.classList.add('block'); }
 
-        const p = document.querySelector(`.hero-poster[data-index="${index}"]`);
-        if (p) { p.classList.remove('hidden'); p.classList.add('block'); }
-
+        /* active dot style — pill shape */
         const d = document.querySelector(`.hero-dot[data-index="${index}"]`);
-        if (d) d.className = 'hero-dot h-2 w-9 rounded-full bg-fuchsia-400 transition-all';
+        if (d) d.className = 'hero-dot h-1.5 w-5 rounded-full bg-fuchsia-400 transition-all';
 
         refreshIcons();
     }
@@ -501,7 +502,19 @@
         setSlide(activeIndex === 0 ? total - 1 : activeIndex - 1);
     }
 
-    setInterval(nextSlide, 5500);
+    /* ── Touch / swipe support for hero on mobile ──────────────────── */
+    (function () {
+        let startX = 0;
+        const hero = document.getElementById('heroSliderContainer');
+        if (!hero) return;
+        hero.addEventListener('touchstart', e => {
+            startX = e.changedTouches[0].clientX;
+        }, { passive: true });
+        hero.addEventListener('touchend', e => {
+            const diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 45) diff > 0 ? nextSlide() : prevSlide();
+        }, { passive: true });
+    })();
 
     /* ─── Profile Dropdown ─────────────────────────────────────────── */
     function toggleProfileDropdown() {
