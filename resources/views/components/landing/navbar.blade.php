@@ -1,18 +1,18 @@
 <header class="sticky top-0 z-50 border-b border-white/10 bg-[#080812]/85 backdrop-blur-xl">
     <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-3">
-            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-lg shadow-fuchsia-500/25">
-                <i data-lucide="film" class="h-6 w-6 text-white"></i>
+            <div class="flex h-11 w-25">
+                <img src={{asset('logo/logo.png')}} alt="Logo" class="h-11 w-25 rounded-1xl object-cover">
             </div>
 
-            <div>
+            {{-- <div>
                 <h1 class="text-xl font-black leading-none text-white">
-                    AnimeStreamer
+                    floxanimeindia
                 </h1>
                 <p class="mt-1 hidden text-xs text-slate-400 sm:block">
                     Watch animated videos online
                 </p>
-            </div>
+            </div> --}}
         </div>
 
         <nav class="hidden items-center gap-6 text-sm text-slate-300 lg:flex">

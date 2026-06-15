@@ -26,6 +26,15 @@
             .main-content { margin-left: 0; }
         }
     </style>
+    {{-- Global form styles (works with Tailwind CDN) --}}
+    <style type="text/tailwindcss">
+        .form-label { @apply mb-1.5 block text-xs font-semibold text-slate-400; }
+        .form-input  { @apply w-full rounded-2xl border border-white/10 bg-white/6 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-600 focus:border-violet-500/50 focus:bg-white/8 transition; }
+        .form-error  { @apply mt-1 text-xs text-red-400; }
+        select.form-input option { background: #111122; }
+        input[type="date"].form-input::-webkit-calendar-picker-indicator { filter: invert(1) opacity(0.5); }
+        textarea.form-input { resize: none; }
+    </style>
     @stack('styles')
 </head>
 <body class="min-h-screen bg-[#070713] text-white">
