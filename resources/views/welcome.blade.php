@@ -477,7 +477,7 @@
         });
         /* inactive dot style */
         document.querySelectorAll('.hero-dot').forEach(el => {
-            el.className = 'hero-dot h-1.5 w-1.5 rounded-full bg-white/30 transition-all hover:bg-white/60';
+            el.className = 'hero-dot h-1 w-1 rounded-full bg-white/30 transition-all hover:bg-white/60 sm:h-1.5 sm:w-1.5';
         });
 
         const s = document.querySelector(`.hero-slide[data-index="${index}"]`);
@@ -488,7 +488,7 @@
 
         /* active dot style — pill shape */
         const d = document.querySelector(`.hero-dot[data-index="${index}"]`);
-        if (d) d.className = 'hero-dot h-1.5 w-5 rounded-full bg-fuchsia-400 transition-all';
+        if (d) d.className = 'hero-dot h-1 w-4 rounded-full bg-fuchsia-400 transition-all sm:h-1.5 sm:w-5';
 
         refreshIcons();
     }
