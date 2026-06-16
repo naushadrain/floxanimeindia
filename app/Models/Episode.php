@@ -16,6 +16,7 @@ class Episode extends Model
         'duration',
         'video_url',
         'thumbnail',
+        'thumbnail_url',
         'is_filler',
         'aired_at',
     ];

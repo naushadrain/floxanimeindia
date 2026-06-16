@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Anime;
 use App\Models\Episode;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,13 +14,22 @@ class EpisodeController extends Controller
     public function index(Request $request)
     {
         $animes = Anime::orderBy('title')->get();
-        $episodes = Episode::with('anime')
+        $genres = Genre::orderBy('name')->withCount('animes')->get();
+
+        $episodes = Episode::with(['anime.genres'])
             ->when($request->anime_id, fn ($q) => $q->where('anime_id', $request->anime_id))
+            ->when($request->genre_id, fn ($q) => $q->whereHas('anime.genres', fn ($g) => $g->where('genres.id', $request->genre_id)))
             ->orderBy('anime_id')
             ->orderBy('episode_number')
-            ->paginate(15);
+            ->paginate(30);
 
-        return view('dashboard.episodes.index', compact('episodes', 'animes'));
+        return view('dashboard.episodes.index', compact('episodes', 'animes', 'genres'));
+    }
+
+    public function create()
+    {
+        $animes = Anime::orderBy('title')->get();
+        return view('dashboard.episodes.create', compact('animes'));
     }
 
     public function store(Request $request)
@@ -28,24 +38,19 @@ class EpisodeController extends Controller
             'anime_id'       => ['required', 'exists:animes,id'],
             'episode_number' => ['required', 'integer', 'min:1'],
             'title'          => ['nullable', 'string', 'max:255'],
-            'description'    => ['nullable', 'string'],
-            'duration'       => ['nullable', 'integer', 'min:0'],
-            'video_url'      => ['nullable', 'url'],
-            'thumbnail'      => ['nullable', 'image', 'max:2048'],
+            'description'    => ['nullable', 'string', 'max:2000'],
+            'duration'       => ['nullable', 'integer', 'min:0', 'max:86400'],
+            'video_url'      => ['required', 'url', 'max:1000'],
+            'thumbnail_url'  => ['nullable', 'url', 'max:1000'],
             'is_filler'      => ['boolean'],
             'aired_at'       => ['nullable', 'date'],
         ]);
 
         $data['is_filler'] = $request->boolean('is_filler');
 
-        if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $request->file('thumbnail')->store('episodes/thumbnails', 'public');
-        }
-
         Episode::create($data);
 
-        return redirect()->route('dashboard.episodes.index')
-            ->with('success', 'Episode added successfully.');
+        return back()->with('success', 'Episode added successfully.');
     }
 
     public function edit(Episode $episode)
@@ -60,20 +65,15 @@ class EpisodeController extends Controller
             'anime_id'       => ['required', 'exists:animes,id'],
             'episode_number' => ['required', 'integer', 'min:1'],
             'title'          => ['nullable', 'string', 'max:255'],
-            'description'    => ['nullable', 'string'],
-            'duration'       => ['nullable', 'integer', 'min:0'],
-            'video_url'      => ['nullable', 'url'],
-            'thumbnail'      => ['nullable', 'image', 'max:2048'],
+            'description'    => ['nullable', 'string', 'max:2000'],
+            'duration'       => ['nullable', 'integer', 'min:0', 'max:86400'],
+            'video_url'      => ['required', 'url', 'max:1000'],
+            'thumbnail_url'  => ['nullable', 'url', 'max:1000'],
             'is_filler'      => ['boolean'],
             'aired_at'       => ['nullable', 'date'],
         ]);
 
         $data['is_filler'] = $request->boolean('is_filler');
-
-        if ($request->hasFile('thumbnail')) {
-            if ($episode->thumbnail) Storage::disk('public')->delete($episode->thumbnail);
-            $data['thumbnail'] = $request->file('thumbnail')->store('episodes/thumbnails', 'public');
-        }
 
         $episode->update($data);
 
@@ -86,7 +86,6 @@ class EpisodeController extends Controller
         if ($episode->thumbnail) Storage::disk('public')->delete($episode->thumbnail);
         $episode->delete();
 
-        return redirect()->route('dashboard.episodes.index')
-            ->with('success', 'Episode deleted.');
+        return back()->with('success', 'Episode deleted.');
     }
 }

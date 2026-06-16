@@ -11,8 +11,13 @@ class SliderController extends Controller
 {
     public function index()
     {
-        $sliders = Slider::orderBy('sort_order')->get();
+        $sliders = Slider::orderBy('sort_order')->orderBy('id')->get();
         return view('dashboard.slider.index', compact('sliders'));
+    }
+
+    public function create()
+    {
+        return view('dashboard.slider.create');
     }
 
     public function store(Request $request)
@@ -21,14 +26,18 @@ class SliderController extends Controller
             'title'       => ['required', 'string', 'max:255'],
             'subtitle'    => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'image'       => ['required', 'image', 'max:5120'],
+            'image'       => ['nullable', 'image', 'max:5120'],
+            'image_url'   => ['nullable', 'url', 'max:500'],
             'button_text' => ['nullable', 'string', 'max:100'],
-            'button_link' => ['nullable', 'string', 'max:255'],
+            'button_link' => ['nullable', 'string', 'max:500'],
             'sort_order'  => ['nullable', 'integer', 'min:0'],
         ]);
 
-        $data['image_path'] = $request->file('image')->store('sliders', 'public');
-        $data['is_active']  = true;
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('sliders', 'public');
+        }
+
+        $data['is_active'] = true;
         unset($data['image']);
 
         Slider::create($data);
@@ -44,13 +53,14 @@ class SliderController extends Controller
             'subtitle'    => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'image'       => ['nullable', 'image', 'max:5120'],
+            'image_url'   => ['nullable', 'url', 'max:500'],
             'button_text' => ['nullable', 'string', 'max:100'],
-            'button_link' => ['nullable', 'string', 'max:255'],
+            'button_link' => ['nullable', 'string', 'max:500'],
             'sort_order'  => ['nullable', 'integer', 'min:0'],
         ]);
 
         if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($slider->image_path);
+            if ($slider->image_path) Storage::disk('public')->delete($slider->image_path);
             $data['image_path'] = $request->file('image')->store('sliders', 'public');
         }
 
@@ -69,10 +79,10 @@ class SliderController extends Controller
 
     public function destroy(Slider $slider)
     {
-        Storage::disk('public')->delete($slider->image_path);
+        if ($slider->image_path) Storage::disk('public')->delete($slider->image_path);
         $slider->delete();
 
         return redirect()->route('dashboard.slider.index')
-            ->with('success', 'Slider deleted successfully.');
+            ->with('success', 'Slider deleted.');
     }
 }

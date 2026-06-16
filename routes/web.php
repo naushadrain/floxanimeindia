@@ -98,12 +98,12 @@ Route::middleware('auth')
         Route::resource('anime', AnimeController::class);
 
         // Slider management
-        Route::resource('slider', SliderController::class)->except(['show', 'create', 'edit']);
+        Route::resource('slider', SliderController::class)->except(['show', 'edit']);
         Route::patch('slider/{slider}/toggle', [SliderController::class, 'toggle'])->name('slider.toggle');
 
         // Genre management
         Route::resource('genres', GenreController::class)->only(['index', 'store', 'destroy']);
 
         // Episode management
-        Route::resource('episodes', EpisodeController::class)->except(['show', 'create']);
+        Route::resource('episodes', EpisodeController::class)->except(['show']);
     });
